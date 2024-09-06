@@ -1,0 +1,20 @@
+# Ignorer les dépendances locales
+node_modules
+
+# Ignorer les fichiers de logs
+*.log
+
+# Ignorer les fichiers de configuration locaux
+.env
+.dockerignore
+.git
+.gitignore
+
+# Ignorer les fichiers générés par le processus de build
+dist/
+build/
+
+# Ignorer les fichiers cachés du système
+.DS_Store
+.vscode/
+.idea/

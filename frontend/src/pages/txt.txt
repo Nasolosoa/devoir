@@ -1,0 +1,128 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Box, useTheme } from '@mui/material';
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { tokens } from '../theme';
+import Header from "../component/Header";
+import Swal from 'sweetalert2';
+
+const { GoogleMap, LoadScript } = require('@react-google-maps/api');
+
+const mapContainerStyle = {
+  width: '100%',
+  height: '400px',
+};
+
+const center = {
+  lat: -34.397,
+  lng: 150.644,
+};
+
+export const AllMembre = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await axios.get('http://localhost:8080/membre')
+          .then(response => {
+            setData(response.data);
+            console.log(data);
+          })
+          .catch(err => {
+            console.log(err)
+          })
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  const columns = [
+    // ... (same as before)
+  ];
+
+  const navigate = useNavigate();
+  const handleRowClick = (params) => {
+    // ... (same as before)
+  };
+  const handleDelete = async (id) => {
+    // ... (same as before)
+  }
+
+
+  return (
+
+    <Box m="20px">
+      <Header
+        title="MEMBRES"
+      />
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
+        }}
+      >
+
+        <DataGrid
+          rows={data}
+          columns={columns}
+          components={{ Toolbar: GridToolbar }}
+          hideFooterPagination
+          hideFooterSelectedRowCount
+          disableMultipleRowSelection
+          checkboxSelection
+          onRowClick={handleRowClick}
+        />
+
+        <LoadScript
+          googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY"
+        >
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={10}
+          >
+            {/* Add map components here */}
+          </GoogleMap>
+        </LoadScript>
+
+      </Box>
+    </Box>
+  );
+};
+
+export default AllMembre;

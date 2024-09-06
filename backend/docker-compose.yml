@@ -1,0 +1,26 @@
+
+version: '3.8'  # Version de la syntaxe Docker Compose
+
+services:
+  web:
+    image: node:18
+    container_name: node_web
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    command: "npm start"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
